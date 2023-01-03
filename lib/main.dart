@@ -1,115 +1,108 @@
-import 'dart:async';
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_exif_rotation/flutter_exif_rotation.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:image_picker_web/image_picker_web.dart';
 
-void main() => runApp(const MyApp());
+import 'pages/camera.dart';
+import 'pages/camera_web.dart';
 
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
-
-  @override
-  MyAppState createState() => MyAppState();
+void main() {
+  runApp(const MyApp());
 }
 
-/// The class with the scaffold
-class MyAppState extends State<MyApp> {
-  final _pickedImages = <Image>[];
-  final _pickedVideos = <dynamic>[];
-
-  String _imageInfo = '';
-  File? _image;
-  final picker = ImagePicker();
-  final pickerWeb = ImagePickerWeb();
-
-  Future getImage() async {
-    final image = await picker.pickImage(source: ImageSource.gallery);
-    if (image != null) {
-      File rotatedImage =
-          await FlutterExifRotation.rotateImage(path: image.path);
-
-      setState(() {
-        _image = rotatedImage;
-      });
-    }
-  }
-
-  Future getImageAndSave() async {
-    final image = await picker.pickImage(source: ImageSource.gallery);
-    if (image != null) {
-      File rotatedImage =
-          await FlutterExifRotation.rotateAndSaveImage(path: image.path);
-
-      setState(() {
-        _image = rotatedImage;
-      });
-    }
-  }
-
-  Future takePicture() async {
-    final XFile? image = await picker.pickImage(source: ImageSource.camera);
-    if (image != null) {
-      File rotatedImage =
-          await FlutterExifRotation.rotateAndSaveImage(path: image.path);
-
-      setState(() {
-        _image = rotatedImage;
-      });
-    }
-  }
-
-  Future takePictureWeb() async {
-    final fromPicker = await ImagePickerWeb.getImageAsWidget();
-    if (fromPicker != null) {
-      setState(() {
-        _pickedImages.clear();
-        _pickedImages.add(fromPicker);
-      });
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-  }
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Exif flutter rotation image example app'),
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        primarySwatch: Colors.green,
+      ),
+      home: HomePage(),
+    );
+  }
+}
+
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Camera example'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Expanded(
+              flex: 3,
+              child: Align(
+                alignment: Alignment.center,
+                child: const Text(
+                  'body',
+                ),
+              ),
+            ),
+            Expanded(
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: Padding(
+                  padding: const EdgeInsets.all(38.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      FloatingActionButton(
+                        onPressed: () {
+                          //Camera ANDROID e iOS
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => CameraPage(),
+                              fullscreenDialog: true,
+                            ),
+                          );
+                        },
+                        child: const Icon(Icons.camera),
+                      ),
+                      FloatingActionButton(
+                        onPressed: () {
+                          //Camera WEB
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => CameraWebPage(),
+                              fullscreenDialog: true,
+                            ),
+                          );
+                        },
+                        child: const Icon(Icons.web_asset),
+                      ),
+                      FloatingActionButton(
+                        onPressed: () {
+                          //Camera Face detector
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => CameraWebPage(),
+                              fullscreenDialog: true,
+                            ),
+                          );
+                        },
+                        child: const Icon(Icons.face_retouching_natural),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
-        body: Center(
-          child: _image == null
-              ? const Text('No image selected.')
-              : Image.file(_image!),
-        ),
-        persistentFooterButtons: <Widget>[
-          FloatingActionButton(
-            onPressed: getImageAndSave,
-            tooltip: 'Pick Image and save',
-            child: const Icon(Icons.save),
-          ),
-          FloatingActionButton(
-            onPressed: getImage,
-            tooltip: 'Pick Image without saving',
-            child: const Icon(Icons.add),
-          ),
-          FloatingActionButton(
-            onPressed: takePicture,
-            tooltip: 'Pick Image without saving',
-            child: const Icon(Icons.camera_alt),
-          ),
-          FloatingActionButton(
-            onPressed: takePictureWeb,
-            tooltip: 'Pick Image without saving',
-            child: const Icon(Icons.web),
-          ),
-        ],
       ),
     );
   }
