@@ -117,60 +117,69 @@ class _CameraPageState extends State<CameraPage> {
     if (cameraController == null || !cameraController.value.isInitialized) {
       return const Text('Widget para Câmera que não está disponível');
     } else {
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Transform.rotate(
-            angle: 190.07,
-            child: CameraPreview(controller!),
-          ),
-
-          // Empurra o widget pra fora ta tela DIMENSÃO X e DIMENSÃO Y
-          // Transform.translate(
-          //   offset: const Offset(150, 150),
-          //   child: CameraPreview(controller!),
-          // ),
-
-          // Plano cartesiano afundando o widget pra dentro
-          // Transform(
-          //   transform: Matrix4.skewX(0.3),
-          //   child: CameraPreview(controller!),
-          // ),
-
-          // Plano diagonal 3 dimensões
-          // Transform(
-          //   transform: Matrix4.diagonal3Values(0.9, 1.6, 1.8),
-          //   child: CameraPreview(controller!),
-          // ),
-
-          // Transform(
-          //   transform: Matrix4.identity()
-          //     ..setEntry(3, 2, 0.01)
-          //     ..rotateX(0),
-          //   alignment: FractionalOffset.center,
-          //   child: CameraPreview(controller!),
-          // ),
-
-          // Transform(
-          //   transform: Matrix4.skewY(0.3)..rotateY(-pi / 12.0),
-          //   alignment: FractionalOffset.center,
-          //   child: CameraPreview(controller!),
-          // ),
-
-          CircleAvatar(
-            radius: 30,
-            backgroundColor: Colors.black.withOpacity(0.5),
-            child: IconButton(
-              icon: const Icon(
-                Icons.camera_alt,
-                color: Colors.white,
-                size: 24,
+      return SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SizedBox(
+              height: 600,
+              child: Transform.scale(
+                scale: 0.8,
+                child: CameraPreview(controller!),
               ),
-              onPressed: tirarFoto,
             ),
-          ),
-        ],
+
+            // Transform.rotate(
+            //   angle: 190.07,
+            //   child: CameraPreview(controller!),
+            // ),
+
+            // Empurra o widget pra fora ta tela DIMENSÃO X e DIMENSÃO Y
+            // Transform.translate(
+            //   offset: const Offset(150, 150),
+            //   child: CameraPreview(controller!),
+            // ),
+
+            // Plano cartesiano afundando o widget pra dentro
+            // Transform(
+            //   transform: Matrix4.skewX(0.3),
+            //   child: CameraPreview(controller!),
+            // ),
+
+            // Plano diagonal 3 dimensões
+            // Transform(
+            //   transform: Matrix4.diagonal3Values(0.9, 1.6, 1.8),
+            //   child: CameraPreview(controller!),
+            // ),
+
+            // Transform(
+            //   transform: Matrix4.identity()
+            //     ..setEntry(3, 2, 0.01)
+            //     ..rotateX(0),
+            //   alignment: FractionalOffset.center,
+            //   child: CameraPreview(controller!),
+            // ),
+
+            // Transform(
+            //   transform: Matrix4.skewY(0.3)..rotateY(-pi / 12.0),
+            //   alignment: FractionalOffset.center,
+            //   child: CameraPreview(controller!),
+            // ),
+
+            CircleAvatar(
+              radius: 30,
+              backgroundColor: Colors.black.withOpacity(0.5),
+              child: IconButton(
+                icon: const Icon(
+                  Icons.camera_alt,
+                  color: Colors.white,
+                  size: 24,
+                ),
+                onPressed: tirarFoto,
+              ),
+            ),
+          ],
+        ),
       );
     }
   }
