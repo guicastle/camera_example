@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -120,11 +121,43 @@ class _CameraPageState extends State<CameraPage> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Transform.scale(
-            scaleX: 0.6,
-            scaleY: 1.6,
+          Transform.rotate(
+            angle: 190.07,
             child: CameraPreview(controller!),
           ),
+
+          // Empurra o widget pra fora ta tela DIMENSÃO X e DIMENSÃO Y
+          // Transform.translate(
+          //   offset: const Offset(150, 150),
+          //   child: CameraPreview(controller!),
+          // ),
+
+          // Plano cartesiano afundando o widget pra dentro
+          // Transform(
+          //   transform: Matrix4.skewX(0.3),
+          //   child: CameraPreview(controller!),
+          // ),
+
+          // Plano diagonal 3 dimensões
+          // Transform(
+          //   transform: Matrix4.diagonal3Values(0.9, 1.6, 1.8),
+          //   child: CameraPreview(controller!),
+          // ),
+
+          // Transform(
+          //   transform: Matrix4.identity()
+          //     ..setEntry(3, 2, 0.01)
+          //     ..rotateX(0),
+          //   alignment: FractionalOffset.center,
+          //   child: CameraPreview(controller!),
+          // ),
+
+          // Transform(
+          //   transform: Matrix4.skewY(0.3)..rotateY(-pi / 12.0),
+          //   alignment: FractionalOffset.center,
+          //   child: CameraPreview(controller!),
+          // ),
+
           CircleAvatar(
             radius: 30,
             backgroundColor: Colors.black.withOpacity(0.5),
