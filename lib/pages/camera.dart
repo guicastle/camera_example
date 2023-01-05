@@ -116,23 +116,25 @@ class _CameraPageState extends State<CameraPage> {
     if (cameraController == null || !cameraController.value.isInitialized) {
       return const Text('Widget para Câmera que não está disponível');
     } else {
-      return Stack(
-        alignment: AlignmentDirectional.bottomCenter,
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          CameraPreview(controller!),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 24),
-            child: CircleAvatar(
-              radius: 32,
-              backgroundColor: Colors.black.withOpacity(0.5),
-              child: IconButton(
-                icon: const Icon(
-                  Icons.camera_alt,
-                  color: Colors.white,
-                  size: 30,
-                ),
-                onPressed: tirarFoto,
+          Transform.scale(
+            scaleX: 0.6,
+            scaleY: 1.6,
+            child: CameraPreview(controller!),
+          ),
+          CircleAvatar(
+            radius: 30,
+            backgroundColor: Colors.black.withOpacity(0.5),
+            child: IconButton(
+              icon: const Icon(
+                Icons.camera_alt,
+                color: Colors.white,
+                size: 24,
               ),
+              onPressed: tirarFoto,
             ),
           ),
         ],
