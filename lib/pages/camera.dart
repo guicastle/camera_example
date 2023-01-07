@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -18,15 +17,9 @@ class _CameraPageState extends State<CameraPage> {
   XFile? imagem;
   Size? size;
 
-  // List<DeviceOrientation> listOrientations = [
-  //   DeviceOrientation.portraitDown,
-  //   DeviceOrientation.portraitUp
-  // ];
-
   @override
   void initState() {
     super.initState();
-    // SystemChrome.setPreferredOrientations(listOrientations);
     _loadCameras();
   }
 
@@ -78,7 +71,7 @@ class _CameraPageState extends State<CameraPage> {
         elevation: 0,
       ),
       body: Container(
-        color: Colors.grey[900],
+        color: const Color.fromARGB(255, 207, 202, 202),
         child: Center(
           child: SizedBox(
               width: size!.width - 50,
@@ -117,71 +110,124 @@ class _CameraPageState extends State<CameraPage> {
     if (cameraController == null || !cameraController.value.isInitialized) {
       return const Text('Widget para Câmera que não está disponível');
     } else {
-      return SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SizedBox(
-              height: 600,
-              child: Transform.scale(
-                scale: 0.8,
-                child: CameraPreview(controller!),
-              ),
-            ),
-
-            // Transform.rotate(
-            //   angle: 190.07,
-            //   child: CameraPreview(controller!),
-            // ),
-
-            // Empurra o widget pra fora ta tela DIMENSÃO X e DIMENSÃO Y
-            // Transform.translate(
-            //   offset: const Offset(150, 150),
-            //   child: CameraPreview(controller!),
-            // ),
-
-            // Plano cartesiano afundando o widget pra dentro
-            // Transform(
-            //   transform: Matrix4.skewX(0.3),
-            //   child: CameraPreview(controller!),
-            // ),
-
-            // Plano diagonal 3 dimensões
-            // Transform(
-            //   transform: Matrix4.diagonal3Values(0.9, 1.6, 1.8),
-            //   child: CameraPreview(controller!),
-            // ),
-
-            // Transform(
-            //   transform: Matrix4.identity()
-            //     ..setEntry(3, 2, 0.01)
-            //     ..rotateX(0),
-            //   alignment: FractionalOffset.center,
-            //   child: CameraPreview(controller!),
-            // ),
-
-            // Transform(
-            //   transform: Matrix4.skewY(0.3)..rotateY(-pi / 12.0),
-            //   alignment: FractionalOffset.center,
-            //   child: CameraPreview(controller!),
-            // ),
-
-            CircleAvatar(
-              radius: 30,
-              backgroundColor: Colors.black.withOpacity(0.5),
-              child: IconButton(
-                icon: const Icon(
-                  Icons.camera_alt,
-                  color: Colors.white,
-                  size: 24,
+      return Stack(
+        alignment: AlignmentDirectional.center,
+        children: [
+          _buildCameraPreview(cameraController),
+          Padding(
+            padding: const EdgeInsets.only(top: 196),
+            child: Column(
+              children: [
+                const Spacer(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    const SizedBox(width: 96),
+                    GestureDetector(
+                      onTap: tirarFoto,
+                      child: Container(
+                        width: 56,
+                        height: 56,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF666666).withOpacity(0.4),
+                          borderRadius: BorderRadius.circular(33),
+                        ),
+                        child: const Icon(
+                          Icons.camera_alt,
+                          color: Colors.white,
+                          size: 30,
+                        ),
+                      ),
+                    ),
+                    if (cameras.length > 1)
+                      IconButton(
+                        icon: Icon(
+                          Icons.cameraswitch,
+                          color: const Color(0xFF666666).withOpacity(0.4),
+                          size: 30,
+                        ),
+                        onPressed: () {},
+                      )
+                    else
+                      const SizedBox(width: 66),
+                  ],
                 ),
-                onPressed: tirarFoto,
-              ),
+              ],
             ),
-          ],
-        ),
+          ),
+
+          // #  CASE STUDIES FOR TESTS # //
+
+          // SizedBox(
+          //   height: 600,
+          //   child: Transform.scale(
+          //     scale: 0.6,
+          //     child: CameraPreview(controller!),
+          //   ),
+          // ),
+
+          // Transform.rotate(
+          //   angle: 190.07,
+          //   child: CameraPreview(controller!),
+          // ),
+
+          // Empurra o widget pra fora ta tela DIMENSÃO X e DIMENSÃO Y
+          // Transform.translate(
+          //   offset: const Offset(150, 150),
+          //   child: CameraPreview(controller!),
+          // ),
+
+          // Plano cartesiano afundando o widget pra dentro
+          // Transform(
+          //   transform: Matrix4.skewX(0.3),
+          //   child: CameraPreview(controller!),
+          // ),
+
+          // Plano diagonal 3 dimensões
+          // Transform(
+          //   transform: Matrix4.diagonal3Values(0.9, 1.6, 1.8),
+          //   child: CameraPreview(controller!),
+          // ),
+
+          // Transform(
+          //   transform: Matrix4.identity()
+          //     ..setEntry(3, 2, 0.01)
+          //     ..rotateX(0),
+          //   alignment: FractionalOffset.center,
+          //   child: CameraPreview(controller!),
+          // ),
+
+          // Transform(
+          //   transform: Matrix4.skewY(0.3)..rotateY(-pi / 12.0),
+          //   alignment: FractionalOffset.center,
+          //   child: CameraPreview(controller!),
+          // ),
+        ],
       );
     }
+  }
+
+  Widget _buildCameraPreview(CameraController cameraController) {
+    return Padding(
+      padding: const EdgeInsets.all(32.0),
+      child: Transform.scale(
+        scale: 0.8,
+        child: Center(
+          child: Container(
+            clipBehavior: Clip.hardEdge,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(0
+                  //widget.isSelfie == true ? 1000 : 0,
+                  ),
+            ),
+            child: AspectRatio(
+              aspectRatio: 1 / 1.6,
+              child: CameraPreview(cameraController),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   tirarFoto() async {
